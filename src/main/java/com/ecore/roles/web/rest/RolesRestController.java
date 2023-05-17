@@ -63,4 +63,16 @@ public class RolesRestController implements RolesApi {
                 .body(fromModel(rolesService.GetRole(roleId)));
     }
 
+    @Override
+    @GetMapping(
+            path = "/search",
+            produces = {"application/json"})
+    public ResponseEntity<RoleDto> getRoleByUserAndTeam(
+            @RequestParam UUID teamMemberId,
+            @RequestParam UUID teamId) {
+        return ResponseEntity
+                .status(200)
+                .body(fromModel(rolesService.GetRoleByUserAndTeam(teamMemberId, teamId)));
+    }
+
 }

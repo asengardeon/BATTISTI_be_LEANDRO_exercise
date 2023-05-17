@@ -107,8 +107,8 @@ public class MembershipsApiTests {
     @Test
     void shouldFailToCreateRoleMembershipWhenRoleDoesNotExist() {
         Membership expectedMembership = DEFAULT_MEMBERSHIP();
+        mockGetTeamById(mockServer, expectedMembership.getTeamId(), ORDINARY_CORAL_LYNX_TEAM());
         expectedMembership.setRole(Role.builder().id(UUID_1).build());
-
         createMembership(expectedMembership)
                 .validate(404, format("Role %s not found", UUID_1));
     }
