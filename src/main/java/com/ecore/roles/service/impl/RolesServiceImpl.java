@@ -12,10 +12,9 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -51,6 +50,20 @@ public class RolesServiceImpl implements RolesService {
     @Override
     public List<Role> getRoles() {
         return roleRepository.findAll();
+    }
+
+    @Override
+    public List<Role> getRolesByUserIdAndTeamId(@RequestBody List<Map<String, String>> payload) {
+        List<Role> result = new ArrayList<>();
+        for (Map<String, String> m : payload) {
+            UUID userId = UUID.fromString(m.get("userId"));
+            UUID teamId = UUID.fromString(m.get("teamId"));
+            Optional<Membership> membership = membershipRepository.findByUserIdAndTeamId(userId, teamId);
+            if (membership.isPresent()) {
+                result.add(membership.get().getRole());
+            }
+        }
+        return result;
     }
 
     @Override

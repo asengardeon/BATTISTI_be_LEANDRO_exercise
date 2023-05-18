@@ -124,7 +124,7 @@ public class MembershipsApiTests {
     }
 
     @Test
-    @Disabled
+    @Disabled("It's Necessary understand when a Membership is Invalid")
     void shouldFailToAssignRoleWhenMembershipIsInvalid() {
         Membership expectedMembership = INVALID_MEMBERSHIP();
         mockGetTeamById(mockServer, expectedMembership.getTeamId(), ORDINARY_CORAL_LYNX_TEAM());
