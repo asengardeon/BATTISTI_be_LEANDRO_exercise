@@ -21,7 +21,7 @@ public interface RolesApi {
     @GetMapping(
             path = "/search",
             produces = {"application/json"})
-    ResponseEntity<RoleDto> getRoleByUserAndTeam(
+    ResponseEntity<RoleDto> getRoleByUserIdAndTeamId(
             @RequestParam UUID teamMemberId,
             @RequestParam UUID teamId);
 }
