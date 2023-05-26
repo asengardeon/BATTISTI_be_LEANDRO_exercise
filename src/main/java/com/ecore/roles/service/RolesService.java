@@ -3,6 +3,7 @@ package com.ecore.roles.service;
 import com.ecore.roles.model.Role;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface RolesService {
@@ -13,5 +14,7 @@ public interface RolesService {
 
     List<Role> getRoles();
 
-    Role getRoleByUserIdAndTeamId(UUID teamMemberId, UUID teamId);
+    List<Role> getRolesByUserIdAndTeamId(List<Map<String, String>> payload);
+
+    Role getRoleByUserIdAndTeamId(UUID userId, UUID teamId);
 }

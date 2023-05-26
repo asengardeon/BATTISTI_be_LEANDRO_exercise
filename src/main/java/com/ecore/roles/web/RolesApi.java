@@ -2,10 +2,9 @@ package com.ecore.roles.web;
 
 import com.ecore.roles.web.dto.RoleDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface RolesApi {
@@ -15,13 +14,12 @@ public interface RolesApi {
 
     ResponseEntity<List<RoleDto>> getRoles();
 
+    ResponseEntity<List<RoleDto>> getRolesByFilter(List<Map<String, String>> payload);
+
     ResponseEntity<RoleDto> getRole(
             UUID roleId);
 
-    @GetMapping(
-            path = "/search",
-            produces = {"application/json"})
     ResponseEntity<RoleDto> getRoleByUserIdAndTeamId(
-            @RequestParam UUID teamMemberId,
-            @RequestParam UUID teamId);
+            UUID teamMemberId,
+            UUID teamId);
 }
