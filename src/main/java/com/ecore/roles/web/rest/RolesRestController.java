@@ -9,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.ecore.roles.web.dto.RoleDto.fromModel;
 
@@ -29,20 +27,20 @@ public class RolesRestController implements RolesApi {
     public ResponseEntity<RoleDto> createRole(
             @Valid @RequestBody RoleDto role) {
         return ResponseEntity
-                .status(200)
-                .body(fromModel(rolesService.CreateRole(role.toModel())));
+                .status(201)
+                .body(fromModel(rolesService.createRole(role.toModel())));
     }
 
     @Override
-    @PostMapping(
+    @GetMapping(
             produces = {"application/json"})
     public ResponseEntity<List<RoleDto>> getRoles() {
 
-        List<Role> getRoles = rolesService.GetRoles();
+        List<Role> roles = rolesService.getRoles();
 
         List<RoleDto> roleDtoList = new ArrayList<>();
 
-        for (Role role : getRoles) {
+        for (Role role : roles) {
             RoleDto roleDto = fromModel(role);
             roleDtoList.add(roleDto);
         }
@@ -54,13 +52,48 @@ public class RolesRestController implements RolesApi {
 
     @Override
     @PostMapping(
+            consumes = {"application/json"},
+            produces = {"application/json"},
+            path = "/filter")
+    public ResponseEntity<List<RoleDto>> getRolesByFilter(
+            @RequestBody List<Map<String, String>> payload) {
+        List<Role> roles = new ArrayList<>();
+        if (Optional.ofNullable(payload).isPresent()) {
+            roles = rolesService.getRolesByUserIdAndTeamId(payload);
+        }
+        List<RoleDto> roleDtoList = new ArrayList<>();
+
+        for (Role role : roles) {
+            RoleDto roleDto = fromModel(role);
+            roleDtoList.add(roleDto);
+        }
+
+        return ResponseEntity
+                .status(200)
+                .body(roleDtoList);
+    }
+
+    @Override
+    @GetMapping(
             path = "/{roleId}",
             produces = {"application/json"})
     public ResponseEntity<RoleDto> getRole(
             @PathVariable UUID roleId) {
         return ResponseEntity
                 .status(200)
-                .body(fromModel(rolesService.GetRole(roleId)));
+                .body(fromModel(rolesService.getRole(roleId)));
+    }
+
+    @Override
+    @GetMapping(
+            path = "/search",
+            produces = {"application/json"})
+    public ResponseEntity<RoleDto> getRoleByUserIdAndTeamId(
+            @RequestParam UUID userId,
+            @RequestParam UUID teamId) {
+        return ResponseEntity
+                .status(200)
+                .body(fromModel(rolesService.getRoleByUserIdAndTeamId(userId, teamId)));
     }
 
 }
